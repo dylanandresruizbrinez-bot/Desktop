@@ -1,43 +1,44 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>WebOS</title>
-  <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8" />
+<title>WebOS</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+<!-- BOOT -->
+<div id="boot">
+  <div class="bootText">Iniciando sistema...</div>
+</div>
+
 <!-- LOGIN -->
-<div id="loginScreen">
+<div id="login" class="hidden">
   <div class="loginBox">
     <h2>WebOS</h2>
-    <input id="userInput" placeholder="Usuario">
+    <input id="user" placeholder="usuario">
+    <input id="pass" type="password" placeholder="contraseña">
     <button onclick="login()">Entrar</button>
   </div>
 </div>
 
-<!-- DESKTOPS -->
-<div id="os" class="hidden">
+<!-- DESKTOP -->
+<div id="desktop" class="hidden">
 
-  <div id="desktop"></div>
+  <div id="icons"></div>
+  <div id="windows"></div>
 
-  <!-- TASKBAR -->
   <div id="taskbar">
-    <button onclick="toggleStart()">Inicio</button>
-    <div id="appsBar"></div>
-    <button onclick="switchDesktop()">🖥</button>
+    <div onclick="toggleStart()">Inicio</div>
+    <div id="taskApps"></div>
   </div>
 
-  <!-- START MENU -->
-  <div id="startMenu" class="hidden">
-    <div onclick="createWindow('notepad')">Bloc de notas</div>
-    <div onclick="createWindow('explorer')">Explorador</div>
-  </div>
+  <div id="startMenu" class="hidden"></div>
 
 </div>
 
-<audio id="clickSound" src="click.mp3"></audio>
+<script src="kernel.js"></script>
+<script src="ui.js"></script>
 
-<script src="script.js"></script>
 </body>
 </html>
