@@ -1,80 +1,201 @@
-let windowCount = 0;
-let activeWindow = null;
-let offsetX = 0;
-let offsetY = 0;
+let windows = {};
+let z = 1;
+let currentDesktop = 0;
+let desktops = [[], []];
 
-/* MENU INICIO */
-function toggleStart() {
-  const menu = document.getElementById("startMenu");
-  menu.classList.toggle("hidden");
+let icons = [
+  { name: "Bloc", type: "notepad", x: 20, y: 20 },
+  { name: "Explorador", type: "explorer", x: 20, y: 100 }
+];
+
+/* LOGIN */
+function login() {
+  document.getElementById("loginScreen").classList.add("hidden");
+  document.getElementById("os").classList.remove("hidden");
+  loadDesktop();
 }
 
-/* CREAR VENTANAS DINÁMICAS */
-function createWindow(type) {
-  const id = "win" + windowCount++;
+/* START */
+function toggleStart() {
+  document.getElementById("startMenu").classList.toggle("hidden");
+}
 
-  const win = document.createElement("div");
+/* SONIDO */
+function playClick() {
+  let s = document.getElementById("clickSound");
+  if (s) s.play();
+}
+
+/* ESCRITORIOS */
+function switchDesktop() {
+  currentDesktop = (currentDesktop + 1) % desktops.length;
+  loadDesktop();
+}
+
+function loadDesktop() {
+  const d = document.getElementById("desktop");
+  d.innerHTML = "";
+
+  // ICONOS
+  icons.forEach((ic, i) => {
+    let el = document.createElement("div");
+    el.className = "icon";
+    el.style.left = ic.x + "px";
+    el.style.top = ic.y + "px";
+    el.innerHTML = "📁 " + ic.name;
+
+    enableDragIcon(el, ic);
+
+    el.onclick = () => createWindow(ic.type);
+    d.appendChild(el);
+  });
+
+  // WINDOWS
+  desktops[currentDesktop].forEach(id => {
+    if (windows[id]) d.appendChild(windows[id]);
+  });
+}
+
+/* ICON DRAG */
+function enableDragIcon(el, data) {
+  let offsetX, offsetY, dragging = false;
+
+  el.addEventListener("mousedown", (e) => {
+    dragging = true;
+    offsetX = e.clientX - el.offsetLeft;
+    offsetY = e.clientY - el.offsetTop;
+  });
+
+  document.addEventListener("mousemove", (e) => {
+    if (dragging) {
+      data.x = e.clientX - offsetX;
+      data.y = e.clientY - offsetY;
+      el.style.left = data.x + "px";
+      el.style.top = data.y + "px";
+    }
+  });
+
+  document.addEventListener("mouseup", () => dragging = false);
+}
+
+/* WINDOWS */
+function createWindow(type) {
+  playClick();
+
+  let id = "w" + Date.now();
+
+  let win = document.createElement("div");
   win.className = "window";
-  win.id = id;
+  win.style.zIndex = z++;
 
   let content = "";
 
   if (type === "notepad") {
-    content = `<textarea style="width:95%;height:150px;">Escribe aquí...</textarea>`;
+    content = `<textarea style="width:100%;height:160px"></textarea>`;
   }
 
   if (type === "explorer") {
     content = `
-      <div>📁 Documentos</div>
+      <div onclick="saveFile('archivo.txt')">📄 archivo.txt</div>
       <div>📁 Descargas</div>
-      <div>📄 archivo.txt</div>
     `;
   }
 
   win.innerHTML = `
     <div class="titlebar">
-      <span>${type.toUpperCase()}</span>
-      <button onclick="closeWindow('${id}')">X</button>
+      <span>${type}</span>
+      <div>
+        <button onclick="minimize('${id}')">_</button>
+        <button onclick="maximize('${id}')">⬜</button>
+        <button onclick="closeWin('${id}')">X</button>
+      </div>
     </div>
     <div class="content">${content}</div>
   `;
 
-  win.style.top = (50 + windowCount * 20) + "px";
-  win.style.left = (80 + windowCount * 20) + "px";
+  win.id = id;
+  win.dataset.max = "0";
 
-  document.getElementById("desktop").appendChild(win);
+  windows[id] = win;
+  desktops[currentDesktop].push(id);
 
   enableDrag(win);
+  addTaskbarApp(id, type);
+
+  loadDesktop();
 }
 
-/* CERRAR */
-function closeWindow(id) {
-  document.getElementById(id).remove();
-}
-
-/* DRAG SISTEMA */
+/* DRAG WINDOW */
 function enableDrag(win) {
-  const bar = win.querySelector(".titlebar");
+  let bar = win.querySelector(".titlebar");
+  let ox, oy, active = false;
 
-  bar.addEventListener("mousedown", (e) => {
-    activeWindow = win;
-    offsetX = e.clientX - win.offsetLeft;
-    offsetY = e.clientY - win.offsetTop;
-  });
+  bar.onmousedown = (e) => {
+    active = true;
+    ox = e.clientX - win.offsetLeft;
+    oy = e.clientY - win.offsetTop;
+    win.style.zIndex = z++;
+  };
+
+  document.onmousemove = (e) => {
+    if (active) {
+      win.style.left = (e.clientX - ox) + "px";
+      win.style.top = (e.clientY - oy) + "px";
+    }
+  };
+
+  document.onmouseup = () => active = false;
 }
 
-document.addEventListener("mousemove", (e) => {
-  if (activeWindow) {
-    activeWindow.style.left = (e.clientX - offsetX) + "px";
-    activeWindow.style.top = (e.clientY - offsetY) + "px";
+/* MINIMIZE */
+function minimize(id) {
+  windows[id].classList.toggle("hiddenWin");
+}
+
+/* MAXIMIZE */
+function maximize(id) {
+  let w = windows[id];
+
+  if (w.dataset.max == "0") {
+    w.dataset.max = "1";
+    w.dataset.old = w.style.cssText;
+
+    w.style.left = "0";
+    w.style.top = "0";
+    w.style.width = "100vw";
+    w.style.height = "calc(100vh - 40px)";
+  } else {
+    w.dataset.max = "0";
+    w.style.cssText = w.dataset.old;
   }
-});
-
-document.addEventListener("mouseup", () => {
-  activeWindow = null;
-});
-
-/* API SIMPLE */
-function openApp(app) {
-  createWindow(app);
 }
+
+/* CLOSE */
+function closeWin(id) {
+  windows[id].remove();
+  delete windows[id];
+}
+
+/* TASKBAR APPS */
+function addTaskbarApp(id, name) {
+  let bar = document.getElementById("appsBar");
+
+  let b = document.createElement("button");
+  b.innerText = name;
+  b.onclick = () => minimize(id);
+
+  bar.appendChild(b);
+}
+
+/* FILE SYSTEM (LOCALSTORAGE) */
+function saveFile(name) {
+  let data = localStorage.getItem("files");
+  let files = data ? JSON.parse(data) : {};
+
+  files[name] = "contenido simulado";
+
+  localStorage.setItem("files", JSON.stringify(files));
+}
+
+/* INIT DESKTOP */
+desktops = [[], []];
