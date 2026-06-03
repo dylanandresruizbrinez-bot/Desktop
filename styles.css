@@ -4,37 +4,59 @@ body {
   overflow: hidden;
 }
 
+/* DESKTOP */
 #desktop {
   width: 100vw;
   height: 100vh;
-  background: #1e90ff;
+  background: linear-gradient(#1e90ff, #0b3d91);
   position: relative;
 }
 
+/* ICONOS */
+.icon {
+  width: 80px;
+  text-align: center;
+  color: white;
+  margin: 20px;
+  cursor: pointer;
+  display: inline-block;
+  transition: transform 0.2s;
+}
+
+.icon:hover {
+  transform: scale(1.1);
+}
+
+/* VENTANAS */
 .window {
   width: 300px;
-  height: 200px;
+  height: 220px;
   background: white;
   position: absolute;
-  top: 100px;
-  left: 100px;
   border: 1px solid #333;
-  display: block;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+  animation: pop 0.2s ease;
+}
+
+@keyframes pop {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
 }
 
 .titlebar {
-  background: #333;
+  background: #222;
   color: white;
   padding: 5px;
+  cursor: move;
   display: flex;
   justify-content: space-between;
-  cursor: move;
 }
 
 .content {
   padding: 10px;
 }
 
+/* TASKBAR */
 #taskbar {
   position: fixed;
   bottom: 0;
@@ -43,9 +65,26 @@ body {
   padding: 5px;
 }
 
-#taskbar button {
+/* START MENU */
+#startMenu {
+  position: fixed;
+  bottom: 40px;
+  left: 10px;
+  width: 200px;
+  background: #222;
   color: white;
-  background: #444;
-  border: none;
-  padding: 5px;
+  border: 1px solid #444;
+}
+
+#startMenu div {
+  padding: 10px;
+  cursor: pointer;
+}
+
+#startMenu div:hover {
+  background: #333;
+}
+
+.hidden {
+  display: none;
 }
