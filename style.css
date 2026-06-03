@@ -1,0 +1,59 @@
+body {
+  margin: 0;
+  font-family: Arial;
+  overflow: hidden;
+  background: black;
+}
+
+/* BOOT */
+#boot {
+  color: lime;
+  padding: 20px;
+  font-family: monospace;
+}
+
+/* LOGIN */
+.hidden { display: none; }
+
+#login {
+  width: 100vw;
+  height: 100vh;
+  background: #1e1e1e;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loginBox {
+  background: #2a2a2a;
+  padding: 20px;
+  color: white;
+}
+
+/* DESKTOP */
+#desktop {
+  width: 100vw;
+  height: 100vh;
+  background: url("https://wallpaperaccess.com/full/317501.jpg");
+  background-size: cover;
+}
+
+#taskbar {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 40px;
+  background: rgba(0,0,0,0.7);
+  color: white;
+  display: flex;
+  align-items: center;
+}
+
+/* WINDOWS BASE */
+.window {
+  position: absolute;
+  width: 300px;
+  height: 200px;
+  background: white;
+  border: 1px solid black;
+}
