@@ -1,0 +1,51 @@
+body {
+  margin: 0;
+  font-family: Arial;
+  overflow: hidden;
+}
+
+#desktop {
+  width: 100vw;
+  height: 100vh;
+  background: #1e90ff;
+  position: relative;
+}
+
+.window {
+  width: 300px;
+  height: 200px;
+  background: white;
+  position: absolute;
+  top: 100px;
+  left: 100px;
+  border: 1px solid #333;
+  display: block;
+}
+
+.titlebar {
+  background: #333;
+  color: white;
+  padding: 5px;
+  display: flex;
+  justify-content: space-between;
+  cursor: move;
+}
+
+.content {
+  padding: 10px;
+}
+
+#taskbar {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: #111;
+  padding: 5px;
+}
+
+#taskbar button {
+  color: white;
+  background: #444;
+  border: none;
+  padding: 5px;
+}
