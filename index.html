@@ -1,28 +1,37 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <title>Mini Windows</title>
+  <meta charset="UTF-8">
+  <title>Mini Windows 10</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
 <div id="desktop">
-  
-  <div class="window" id="win1">
-    <div class="titlebar">
-      <span>Mi ventana</span>
-      <button onclick="closeWindow('win1')">X</button>
-    </div>
-    <div class="content">
-      Hola, esto es una ventana.
-    </div>
+
+  <!-- ICONOS -->
+  <div class="icon" onclick="openApp('explorer')">
+    📁 Archivos
   </div>
+
+  <div class="icon" onclick="createWindow('notepad')">
+    📝 Bloc
+  </div>
+
+  <!-- VENTANAS -->
+  <div id="windows"></div>
 
 </div>
 
+<!-- TASKBAR -->
 <div id="taskbar">
-  <button onclick="openWindow('win1')">Ventana 1</button>
+  <button onclick="toggleStart()">Inicio</button>
+</div>
+
+<!-- START MENU -->
+<div id="startMenu" class="hidden">
+  <div onclick="createWindow('notepad')">📝 Bloc de notas</div>
+  <div onclick="openApp('explorer')">📁 Explorador</div>
 </div>
 
 <script src="script.js"></script>
