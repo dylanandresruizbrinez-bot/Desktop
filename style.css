@@ -472,3 +472,7 @@ button {
         font-size: 11px;
     }
 }
+loadDesktop();
+updateClock();
+renderStartMenu();
+applySettings();
