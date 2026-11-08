@@ -1,59 +1,457 @@
-body {
-  margin: 0;
-  font-family: Arial;
-  overflow: hidden;
-  background: black;
+
+* {
+    box-sizing: border-box;
 }
 
-/* BOOT */
+:root {
+    --accent: #36a3ff;
+    --taskbar: rgba(15, 18, 25, 0.94);
+    --panel: #202630;
+    --text: #f5f7fa;
+}
+
+body {
+    margin: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+    background: #080b10;
+    color: var(--text);
+}
+
+button,
+input,
+textarea {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* ARRANQUE */
+
 #boot {
-  color: lime;
-  padding: 20px;
-  font-family: monospace;
+    position: fixed;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 18px;
+    background: #05080d;
+    color: #7dff9b;
+    font-family: monospace;
+    z-index: 10000;
+}
+
+.bootLogo,
+.loginLogo {
+    font-size: 42px;
+    font-weight: bold;
+    letter-spacing: 3px;
+}
+
+.bootText {
+    font-size: 14px;
+}
+
+.bootLoader {
+    width: 190px;
+    height: 4px;
+    background: #1b3526;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.bootLoader span {
+    display: block;
+    width: 40%;
+    height: 100%;
+    background: #65ff8a;
+    animation: loading 1.4s infinite ease-in-out;
+}
+
+@keyframes loading {
+    from { transform: translateX(-110%); }
+    to { transform: translateX(270%); }
 }
 
 /* LOGIN */
-.hidden { display: none; }
 
 #login {
-  width: 100vw;
-  height: 100vh;
-  background: #1e1e1e;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    position: fixed;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background:
+        radial-gradient(circle at top, #25374c, #10151e 60%, #080b10);
 }
 
 .loginBox {
-  background: #2a2a2a;
-  padding: 20px;
-  color: white;
+    width: min(350px, 90vw);
+    padding: 35px;
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+    text-align: center;
+    background: rgba(30, 37, 48, 0.95);
+    border: 1px solid #465466;
+    border-radius: 14px;
+    box-shadow: 0 20px 60px #0009;
 }
 
-/* DESKTOP */
-#desktop {
-  width: 100vw;
-  height: 100vh;
-  background: url("https://wallpaperaccess.com/full/317501.jpg");
-  background-size: cover;
+.loginLogo {
+    font-size: 32px;
+    color: var(--accent);
 }
+
+.loginBox p {
+    color: #aab5c4;
+    font-size: 13px;
+}
+
+.loginBox input {
+    padding: 12px;
+    color: white;
+    background: #111821;
+    border: 1px solid #455366;
+    border-radius: 6px;
+    outline: none;
+}
+
+.loginBox input:focus {
+    border-color: var(--accent);
+}
+
+.loginBox button {
+    padding: 12px;
+    color: white;
+    background: #167bd0;
+    border: none;
+    border-radius: 6px;
+}
+
+.loginBox button:hover {
+    background: #2695ed;
+}
+
+.error {
+    min-height: 16px;
+    color: #ff7777 !important;
+}
+
+/* ESCRITORIO */
+
+#desktop {
+    position: fixed;
+    inset: 0;
+    background:
+        linear-gradient(135deg, rgba(5, 12, 24, 0.35), rgba(0, 0, 0, 0.15)),
+        url("https://wallpaperaccess.com/full/317501.jpg") center / cover;
+}
+
+#desktopArea {
+    position: absolute;
+    inset: 0 0 44px 0;
+    overflow: hidden;
+}
+
+#icons {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.icon {
+    position: absolute;
+    width: 85px;
+    min-height: 70px;
+    padding: 8px 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    color: white;
+    font-size: 13px;
+    text-align: center;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    cursor: default;
+    user-select: none;
+    pointer-events: auto;
+}
+
+.icon .iconSymbol {
+    font-size: 30px;
+}
+
+.icon:hover,
+.icon.selected {
+    background: rgba(70, 150, 230, 0.25);
+    border-color: #7bbcff88;
+}
+
+/* VENTANAS */
+
+#windows {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.window {
+    position: absolute;
+    top: 90px;
+    left: 150px;
+    width: 420px;
+    height: 300px;
+    min-width: 260px;
+    min-height: 160px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    color: #20242b;
+    background: #f0f2f5;
+    border: 1px solid #66717e;
+    border-radius: 8px;
+    box-shadow: 0 12px 35px #0008;
+    pointer-events: auto;
+}
+
+.window.active {
+    border-color: var(--accent);
+    box-shadow: 0 12px 40px #0009, 0 0 0 1px #36a3ff55;
+}
+
+.titlebar {
+    height: 38px;
+    min-height: 38px;
+    padding: 0 8px 0 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    background: #26384c;
+    cursor: move;
+    user-select: none;
+}
+
+.windowTitle {
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.windowControls {
+    display: flex;
+    gap: 4px;
+}
+
+.windowControls button {
+    width: 28px;
+    height: 25px;
+    color: white;
+    background: #42566c;
+    border: none;
+    border-radius: 4px;
+}
+
+.windowControls button:hover {
+    background: #607990;
+}
+
+.windowControls .closeButton:hover {
+    background: #d83b45;
+}
+
+.content {
+    flex: 1;
+    min-height: 0;
+    padding: 12px;
+    overflow: auto;
+    background: #f2f4f7;
+}
+
+.window.hiddenWin {
+    display: none;
+}
+
+/* BLOC DE NOTAS */
+
+.notepad {
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    resize: none;
+    border: 1px solid #c4cbd3;
+    outline: none;
+    background: white;
+    color: #222;
+}
+
+/* EXPLORADOR */
+
+.fileItem {
+    padding: 10px;
+    margin-bottom: 5px;
+    color: #252b33;
+    background: white;
+    border: 1px solid #d8dde4;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.fileItem:hover {
+    background: #e4f1ff;
+}
+
+/* BARRA DE TAREAS */
 
 #taskbar {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  height: 40px;
-  background: rgba(0,0,0,0.7);
-  color: white;
-  display: flex;
-  align-items: center;
+    position: absolute;
+    z-index: 9000;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 44px;
+    padding: 4px 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--taskbar);
+    border-top: 1px solid #ffffff22;
+    backdrop-filter: blur(12px);
 }
 
-/* WINDOWS BASE */
-.window {
-  position: absolute;
-  width: 300px;
-  height: 200px;
-  background: white;
-  border: 1px solid black;
+#startButton {
+    height: 34px;
+    padding: 0 18px;
+    color: white;
+    background: #167bd0;
+    border: none;
+    border-radius: 5px;
+}
+
+#startButton:hover {
+    background: #2695ed;
+}
+
+#taskApps {
+    flex: 1;
+    display: flex;
+    gap: 5px;
+    overflow: hidden;
+}
+
+.taskApp {
+    max-width: 150px;
+    height: 32px;
+    padding: 0 12px;
+    overflow: hidden;
+    color: white;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    background: #303b49;
+    border: 1px solid #566476;
+    border-radius: 5px;
+}
+
+.taskApp.active {
+    background: #176bb0;
+}
+
+#taskClock {
+    min-width: 65px;
+    color: white;
+    font-size: 12px;
+    text-align: center;
+}
+
+/* MENÚ INICIO */
+
+#startMenu {
+    position: absolute;
+    z-index: 9500;
+    left: 8px;
+    bottom: 50px;
+    width: 260px;
+    padding: 15px;
+    color: white;
+    background: rgba(25, 32, 43, 0.97);
+    border: 1px solid #536276;
+    border-radius: 10px;
+    box-shadow: 0 12px 35px #0008;
+}
+
+.startHeader {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 5px 8px 15px;
+    border-bottom: 1px solid #ffffff22;
+}
+
+.startHeader strong {
+    font-size: 20px;
+    color: var(--accent);
+}
+
+.startHeader span {
+    font-size: 12px;
+    color: #aab5c4;
+}
+
+#startApps {
+    padding: 10px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.startApp,
+.shutdownButton {
+    padding: 10px;
+    color: white;
+    text-align: left;
+    background: #303b49;
+    border: none;
+    border-radius: 5px;
+}
+
+.startApp:hover,
+.shutdownButton:hover {
+    background: #40536a;
+}
+
+.shutdownButton {
+    width: 100%;
+    background: #71343b;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 600px) {
+    .window {
+        top: 5%;
+        left: 3%;
+        width: 94%;
+        height: 75%;
+    }
+
+    #startMenu {
+        width: 240px;
+    }
+
+    .taskApp {
+        max-width: 90px;
+        padding: 0 7px;
+        font-size: 11px;
+    }
 }
