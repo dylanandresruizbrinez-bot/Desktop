@@ -14,11 +14,13 @@ const desktops = [[], []];
 const icons = [
     { name: "Bloc de notas", type: "notepad", symbol: "📝", x: 20, y: 20 },
     { name: "Explorador", type: "explorer", symbol: "📁", x: 20, y: 115 }
+    { name: "Configuración", type: "settings", symbol: "⚙️", x: 20, y: 210 }
 ];
 
 const applications = [
     { name: "Bloc de notas", type: "notepad", symbol: "📝" },
     { name: "Explorador", type: "explorer", symbol: "📁" }
+    { name: "Configuración", type: "settings", symbol: "⚙️" }
 ];
 
 // ---------- UTILIDADES ----------
@@ -145,6 +147,12 @@ function createWindow(type) {
             height: 320,
             content: createExplorerContent()
         }
+        settings: {
+    title: "Configuración",
+    width: 500,
+    height: 400,
+    content: createSettingsContent()
+}
     };
 
     const app = definitions[type];
@@ -209,6 +217,9 @@ function createWindow(type) {
     if (type === "explorer") {
         setupExplorer(win);
     }
+if (type === "settings") {
+    setupSettings(win);
+}
 
     updateTaskbar();
     focusWindow(id);
@@ -546,4 +557,117 @@ function openApp(type) {
 
     const startMenu = getElement("startMenu");
     if (startMenu) startMenu.classList.add("hidden");
+}
+
+// ============================================
+// CONFIGURACIÓN DE WEBOS
+// ============================================
+
+function createSettingsContent() {
+    return `
+        <div class="settingsPanel">
+
+            <h2>Configuración</h2>
+            <p>Personaliza tu sistema WebOS.</p>
+
+            <section class="settingsSection">
+                <h3>Perfil de usuario</h3>
+                <input
+                    id="settingsUsername"
+                    type="text"
+                    placeholder="Nombre de usuario"
+                >
+            </section>
+
+            <section class="settingsSection">
+                <h3>Fondo de pantalla</h3>
+                <select id="wallpaperSelect">
+                    <option value="default">Fondo original</option>
+                    <option value="blue">Azul</option>
+                    <option value="purple">Morado</option>
+                    <option value="black">Negro</option>
+                </select>
+            </section>
+
+            <section class="settingsSection">
+                <h3>Aspecto del sistema</h3>
+                <select id="themeSelect">
+                    <option value="dark">Oscuro</option>
+                    <option value="light">Claro</option>
+                </select>
+            </section>
+
+            <button id="saveSettings">Guardar cambios</button>
+
+            <p id="settingsStatus"></p>
+
+        </div>
+    `;
+}
+
+function setupSettings(win) {
+    const username = win.querySelector("#settingsUsername");
+    const wallpaper = win.querySelector("#wallpaperSelect");
+    const theme = win.querySelector("#themeSelect");
+    const status = win.querySelector("#settingsStatus");
+
+    const saved = JSON.parse(
+        localStorage.getItem("webos_settings") || "{}"
+    );
+
+    username.value = saved.username || "";
+    wallpaper.value = saved.wallpaper || "default";
+    theme.value = saved.theme || "dark";
+
+    win.querySelector("#saveSettings").addEventListener("click", () => {
+        const settings = {
+            username: username.value.trim(),
+            wallpaper: wallpaper.value,
+            theme: theme.value
+        };
+
+        localStorage.setItem(
+            "webos_settings",
+            JSON.stringify(settings)
+        );
+
+        applySettings(settings);
+
+        status.textContent = "Configuración guardada correctamente.";
+    });
+}
+
+// Aplicar configuración
+
+function applySettings(settings = null) {
+    if (!settings) {
+        settings = JSON.parse(
+            localStorage.getItem("webos_settings") || "{}"
+        );
+    }
+
+    const desktop = document.getElementById("desktop");
+
+    if (!desktop) return;
+
+    const wallpapers = {
+        default: 'url("https://wallpaperaccess.com/full/317501.jpg")',
+        blue: "linear-gradient(135deg, #071b38, #1262a3)",
+        purple: "linear-gradient(135deg, #24113f, #7542a8)",
+        black: "linear-gradient(135deg, #000000, #202020)"
+    };
+
+    desktop.style.backgroundImage =
+        wallpapers[settings.wallpaper] || wallpapers.default;
+
+    document.body.classList.toggle(
+        "lightTheme",
+        settings.theme === "light"
+    );
+
+    const header = document.querySelector(".startHeader strong");
+
+    if (header) {
+        header.textContent = settings.username || "WebOS";
+    }
 }
