@@ -36,9 +36,10 @@ function login() {
     document.getElementById("login").classList.add("hidden");
     document.getElementById("desktop").classList.remove("hidden");
 
-    loadDesktop();
-    updateClock();
-    renderStartMenu();
+loadDesktop();
+updateClock();
+renderStartMenu();
+applySettings();
 }
 
 function logout() {
