@@ -30,9 +30,26 @@ button {
     cursor: pointer;
 }
 
+
+/* Ocultar elementos correctamente */
 .hidden {
     display: none !important;
 }
+
+/* Evitar que el login tape el escritorio */
+#login {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#login.hidden {
+    display: none !important;
+}
+
 
 /* ARRANQUE */
 
