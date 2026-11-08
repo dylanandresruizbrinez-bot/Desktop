@@ -13,13 +13,13 @@ const desktops = [[], []];
 
 const icons = [
     { name: "Bloc de notas", type: "notepad", symbol: "📝", x: 20, y: 20 },
-    { name: "Explorador", type: "explorer", symbol: "📁", x: 20, y: 115 }
+    { name: "Explorador", type: "explorer", symbol: "📁", x: 20, y: 115 },
     { name: "Configuración", type: "settings", symbol: "⚙️", x: 20, y: 210 }
 ];
 
 const applications = [
     { name: "Bloc de notas", type: "notepad", symbol: "📝" },
-    { name: "Explorador", type: "explorer", symbol: "📁" }
+    { name: "Explorador", type: "explorer", symbol: "📁" },
     { name: "Configuración", type: "settings", symbol: "⚙️" }
 ];
 
@@ -146,7 +146,7 @@ function createWindow(type) {
             width: 420,
             height: 320,
             content: createExplorerContent()
-        }
+        },
         settings: {
     title: "Configuración",
     width: 500,
@@ -210,13 +210,14 @@ function createWindow(type) {
     const area = getElement("windows");
     area.appendChild(win);
 
-    if (type === "notepad") {
-        setupNotepad(win);
-    }
+if (type === "notepad") {
+    setupNotepad(win);
+}
 
-    if (type === "explorer") {
-        setupExplorer(win);
-    }
+if (type === "explorer") {
+    setupExplorer(win);
+}
+
 if (type === "settings") {
     setupSettings(win);
 }
@@ -656,9 +657,11 @@ function applySettings(settings = null) {
         purple: "linear-gradient(135deg, #24113f, #7542a8)",
         black: "linear-gradient(135deg, #000000, #202020)"
     };
+desktop.style.background =
+    wallpapers[settings.wallpaper] || wallpapers.default;
 
-    desktop.style.backgroundImage =
-        wallpapers[settings.wallpaper] || wallpapers.default;
+desktop.style.backgroundSize = "cover";
+desktop.style.backgroundPosition = "center";
 
     document.body.classList.toggle(
         "lightTheme",
