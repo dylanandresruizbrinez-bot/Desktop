@@ -1,44 +1,63 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<title>WebOS</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebOS</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<!-- BOOT -->
-<div id="boot">
-  <div class="bootText">Iniciando sistema...</div>
-</div>
+    <!-- PANTALLA DE ARRANQUE -->
+    <div id="boot">
+        <div class="bootLogo">WebOS</div>
+        <div class="bootText">Iniciando sistema...</div>
+        <div class="bootLoader"><span></span></div>
+    </div>
 
-<!-- LOGIN -->
-<div id="login" class="hidden">
-  <div class="loginBox">
-    <h2>WebOS</h2>
-    <input id="user" placeholder="usuario">
-    <input id="pass" type="password" placeholder="contraseña">
-    <button onclick="login()">Entrar</button>
-  </div>
-</div>
+    <!-- INICIO DE SESIÓN -->
+    <div id="login" class="hidden">
+        <div class="loginBox">
+            <div class="loginLogo">WebOS</div>
+            <p>Inicia sesión para continuar</p>
 
-<!-- DESKTOP -->
-<div id="desktop" class="hidden">
+            <input id="user" type="text" placeholder="Usuario" autocomplete="username">
+            <input id="pass" type="password" placeholder="Contraseña" autocomplete="current-password">
 
-  <div id="icons"></div>
-  <div id="windows"></div>
+            <button id="loginButton" onclick="login()">Entrar</button>
+            <p id="loginError" class="error"></p>
+        </div>
+    </div>
 
-  <div id="taskbar">
-    <div onclick="toggleStart()">Inicio</div>
-    <div id="taskApps"></div>
-  </div>
+    <!-- ESCRITORIO -->
+    <div id="desktop" class="hidden">
 
-  <div id="startMenu" class="hidden"></div>
+        <div id="desktopArea">
+            <div id="icons"></div>
+            <div id="windows"></div>
+        </div>
 
-</div>
+        <!-- MENÚ DE INICIO -->
+        <div id="startMenu" class="hidden">
+            <div class="startHeader">
+                <strong>WebOS</strong>
+                <span>Sistema de escritorio</span>
+            </div>
+            <div id="startApps"></div>
+            <button class="shutdownButton" onclick="logout()">Cerrar sesión</button>
+        </div>
 
-<script src="kernel.js"></script>
-<script src="ui.js"></script>
+        <!-- BARRA DE TAREAS -->
+        <div id="taskbar">
+            <button id="startButton" onclick="toggleStart()">Inicio</button>
+            <div id="taskApps"></div>
+            <div id="taskClock"></div>
+        </div>
 
+    </div>
+
+    <script src="kernel.js"></script>
+    <script src="ui.js"></script>
 </body>
 </html>
